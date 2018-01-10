@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
-    "byline": "^5.0.0"
+    "byline": "^5.0.0",
+    "pad": "^2.0.3"
   }
 }

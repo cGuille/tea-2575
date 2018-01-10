@@ -1,5 +1,6 @@
 'use strict';
 
+const pad = require('pad');
 const TransformStream = require('stream').Transform;
 const LineStream = require('byline').LineStream;
 
@@ -15,7 +16,11 @@ class LineTransformStream extends TransformStream {
         const pricesBatchs = stats.prices_batchs;
         const deduplicated = stats.deduplicated;
 
-        callback(null, `EAN=${ean} BATCHS=${pricesBatchs} DEDUP=${deduplicated}` + "\n");
+        const line = pad(13, ean) + ' ' +
+                     pad(6, pricesBatchs) + ' ' +
+                     pad(5, deduplicated);
+
+        callback(null, line + "\n");
     }
 }
 
@@ -26,5 +31,7 @@ process.stdout.on('error', function (error) {
 
     throw error;
 });
+
+console.log(pad(13, 'EAN 13'), 'BATCHS', 'DEDUP');
 
 process.stdin.pipe(new LineStream).pipe(new LineTransformStream).pipe(process.stdout);
