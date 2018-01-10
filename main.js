@@ -7,9 +7,15 @@ class LineTransformStream extends TransformStream {
     _transform(chunk, encoding, callback) {
         const lineContent = chunk.toString(encoding !== 'buffer' ? encoding : null);
 
-        // TODO: do something with the line content
+        const parts = lineContent.split(' -- ');
+        const bookIdentifiers = JSON.parse(parts[0]);
+        const stats = JSON.parse(parts[1]);
 
-        callback(null, lineContent + "\n");
+        const ean = bookIdentifiers.ean13;
+        const pricesBatchs = stats.prices_batchs;
+        const deduplicated = stats.deduplicated;
+
+        callback(null, `EAN=${ean} BATCHS=${pricesBatchs} DEDUP=${deduplicated}` + "\n");
     }
 }
 
